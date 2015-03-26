@@ -82,10 +82,14 @@ public class KochSnowflakeViewer implements ActionListener
         int order = drawing.getOrder();
 
         if (event.getSource() == increase)
-            order++;
+            {
+                order++;
+            }
         else
-            order--;
-
+            {
+                order--;
+            }
+        
         if (order >= MIN && order <= MAX)
         {
             orderLabel.setText ("Order: " + order);

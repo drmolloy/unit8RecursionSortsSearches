@@ -26,7 +26,7 @@ public class KochPanel extends JPanel
    public KochPanel (int currentOrder)
    {
       current = currentOrder;
-      setBackground (Color.black);
+      setBackground (Color.orange);
       setPreferredSize (new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
    }
 
@@ -71,7 +71,7 @@ public class KochPanel extends JPanel
    {
       super.paintComponent (page);
 
-      page.setColor (Color.green);
+      page.setColor (Color.blue);
 
       drawFractal (current, TOPX, TOPY, LEFTX, LEFTY, page);
       drawFractal (current, LEFTX, LEFTY, RIGHTX, RIGHTY, page);
