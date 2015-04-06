@@ -1,34 +1,52 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.awt.geom.Line2D;
 
-public class FractalPanelViewer
+public class FractalPanelViewer extends JPanel
 {
-    private final int WIDTH = 400;
-    private final int HEIGHT = 500;
-    private JLabel titleLabel, orderLabel;
-    private FractalPanel drawing;
-    private JPanel panel, tools;
-    private JFrame frame;
-    public static void main(String[] args)
-    {
-        FractalPanelViewer viewer = new FractalPanelViewer();
-    }
-
+    private final int WIDTH = 1000;
+    private final int HEIGHT = 1000;
+    
+    private final double smallFactor = .7;
+    private final double angle = 25;
+    
+    
     public FractalPanelViewer()
     {
-        tools = new JPanel ();
-        tools.setLayout (new BoxLayout(tools, BoxLayout.X_AXIS));
-        tools.setBackground (Color.black);
-        tools.setOpaque (true);
+        setBackground(Color.red);
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+    }
 
-        panel = new JPanel();
-        panel.add (tools);
-
-        frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(WIDTH, HEIGHT);
-        frame.add(panel);
-        frame.setVisible(true);
+    public void drawFractal(double x, double y, double prevLength, double prevAngle, Graphics2D g2)    {
+        double newLength = prevLength*smallFactor;
+        if(newLength < 10)
+        {
+        return;
+        }
+        else
+        {
+            double leftAngle = prevAngle - angle;
+            double rightAngle = prevAngle + angle;
+            double deltaXLeft = newLength * Math.sin(Math.toRadians((leftAngle)));
+            double deltaYLeft = newLength * Math.cos(Math.toRadians((leftAngle)));
+            double deltaXRight = newLength * Math.sin(Math.toRadians((leftAngle)));
+            double deltaYRight = newLength * Math.cos(Math.toRadians((leftAngle)));
+            double xLeft = x + deltaXLeft;
+            double xRight = x + deltaXRight;
+            double yLeft = y - deltaYLeft;
+            double yRight = y - deltaYRight;
+            g2.draw(new Line2D.Double(x,y,xLeft,yLeft));
+            g2.draw(new Line2D.Double(x,y,xRight,yRight));
+            drawFractal(xLeft,yLeft,newLength,leftAngle,g2);
+            drawFractal(xRight,yRight,newLength,rightAngle,g2);
+        }
+    }
+    public void paintComponent(Graphics g)
+    {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+        g.setColor(Color.blue);
+        drawFractal(WIDTH/2,HEIGHT,250, angle,g2);
     }
 }
